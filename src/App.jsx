@@ -5,20 +5,37 @@ const messages = [
   "Apply for jobs 💼",
   "Invest your new income 🤑",
 ];
-function App() {
+export default function App() {
+  return (
+    <div>
+      <Steps />
+      <StepMessage step={1}>
+        <p>Learn React ⚛️</p>
+      </StepMessage>
+      <StepMessage step={2}>
+        <p>Apply for jobs 💼</p>
+      </StepMessage>
+      <StepMessage step={3}>
+        <p>Invest your new income 🤑</p>
+      </StepMessage>
+    </div>
+  );
+}
+
+function Steps() {
   const [step, setSteps] = useState(1);
   const [isOpen, setIsOpen] = useState(true);
 
-  function hadlePrevios() {
-    if (step > 1) setSteps(step - 1);
+  function handlePrevious() {
+    if (step > 1) setSteps((s) => s - 1);
   }
-  function hadleNext() {
-    if (step < 3) setSteps(step + 1);
+  function handleNext() {
+    if (step < 3) setSteps((s) => s + 1);
   }
 
   return (
     <>
-      <button className="close" onClick={() => setIsOpen(!isOpen)}>
+      <button className="close" onClick={() => setIsOpen((is) => !is)}>
         &times;
       </button>
       {isOpen && (
@@ -29,22 +46,15 @@ function App() {
             <div className={`${step >= 3 ? "active" : ""}`}>3</div>
           </div>
 
-          <p className="message">
-            Step {step}: {messages[step - 1]}
-          </p>
+          <StepMessage step={step}>{messages[step - 1]}</StepMessage>
+
           <div className="buttons">
-            <button
-              style={{ background: "#7950f2", color: "#fff" }}
-              onClick={hadlePrevios}
-            >
-              Previous
-            </button>
-            <button
-              style={{ background: "#7950f2", color: "#fff" }}
-              onClick={hadleNext}
-            >
-              Next
-            </button>
+            <Button bgColor="#7950f2" textColor="#fff" onClick={handlePrevious}>
+              <span>⏮️</span> Previous
+            </Button>
+            <Button bgColor="#7950f2" textColor="#fff" onClick={handleNext}>
+              Next<span>⏭️</span>
+            </Button>
           </div>
         </div>
       )}
@@ -52,4 +62,18 @@ function App() {
   );
 }
 
-export default App;
+function StepMessage({ step, children }) {
+  return (
+    <div className="message">
+      Step {step}: {children}
+    </div>
+  );
+}
+
+function Button({ bgColor, textColor, onClick, children }) {
+  return (
+    <button style={{ background: bgColor, color: textColor }} onClick={onClick}>
+      {children}
+    </button>
+  );
+}
